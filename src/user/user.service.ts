@@ -1,21 +1,22 @@
 import { Injectable } from "@nestjs/common";
 import axios, { AxiosResponse } from 'axios';
-
+import { AdminService } from "../admin/admin.service";
 
 @Injectable()
 export class UserService
 {
+    constructor(private adminService: AdminService){};
     async getWeather()
     {
         const apiKey = '4f2efa67ddc44f2a9ad1e2d43b3e79ab';
-        const cities = ['delhi', 'hyderabad'];
+        const cities = await this.adminService.getAllCities();
         const openWeatherBaseUrl = 'https://api.openweathermap.org/data/2.5/weather';
         const weatherData = [];
         for (const city of cities) {
             try {
             const response = await axios.get(openWeatherBaseUrl, {
                 params: {
-                q: city,
+                q: city.name,
                 appid: apiKey,
                 },
             });

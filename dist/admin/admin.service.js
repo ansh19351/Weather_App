@@ -16,22 +16,36 @@ exports.AdminService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const city_entity_1 = require("./entities/city.entity");
+const admin_entity_1 = require("./entities/admin.entity");
 const typeorm_2 = require("typeorm");
 let AdminService = class AdminService {
-    constructor(CityRepository) {
+    constructor(CityRepository, AdminRepository) {
         this.CityRepository = CityRepository;
+        this.AdminRepository = AdminRepository;
+    }
+    async signup(admin) {
+        return this.AdminRepository.save(this.AdminRepository.create(admin));
+    }
+    async signin(admin) {
+        const users = await this.AdminRepository.find({ where: { email: admin.email } });
+        const [user] = users;
+        if (!user || user.password !== admin.password) {
+            return null;
+        }
+        return user;
     }
     async add(city) {
         return this.CityRepository.save(this.CityRepository.create(city));
     }
     async getAllCities() {
-        return this.CityRepository.find();
+        return await this.CityRepository.find();
     }
 };
 exports.AdminService = AdminService;
 exports.AdminService = AdminService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(city_entity_1.City)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(1, (0, typeorm_1.InjectRepository)(admin_entity_1.Admin)),
+    __metadata("design:paramtypes", [typeorm_2.Repository, typeorm_2.Repository])
 ], AdminService);
 //# sourceMappingURL=admin.service.js.map

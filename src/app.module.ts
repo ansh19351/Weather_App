@@ -3,6 +3,7 @@ import { UserModule } from './user/user.module';
 import { AdminModule } from './admin/admin.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { City } from './admin/entities/city.entity';
+import { Admin } from './admin/entities/admin.entity';
 @Module({
   imports: [TypeOrmModule.forRootAsync({
     useFactory: () => ({
@@ -11,8 +12,8 @@ import { City } from './admin/entities/city.entity';
       port: 5432,
       username: 'postgres',
       password: 'Marghat$0811',
-      database: 'city',
-      entities: [City],
+      database: 'postgres',
+      entities: [City,Admin],
       synchronize: true,
       logging: true,
     }),

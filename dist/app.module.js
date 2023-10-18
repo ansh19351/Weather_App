@@ -12,6 +12,7 @@ const user_module_1 = require("./user/user.module");
 const admin_module_1 = require("./admin/admin.module");
 const typeorm_1 = require("@nestjs/typeorm");
 const city_entity_1 = require("./admin/entities/city.entity");
+const admin_entity_1 = require("./admin/entities/admin.entity");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -24,8 +25,8 @@ exports.AppModule = AppModule = __decorate([
                     port: 5432,
                     username: 'postgres',
                     password: 'Marghat$0811',
-                    database: 'city',
-                    entities: [city_entity_1.City],
+                    database: 'postgres',
+                    entities: [city_entity_1.City, admin_entity_1.Admin],
                     synchronize: true,
                     logging: true,
                 }),
