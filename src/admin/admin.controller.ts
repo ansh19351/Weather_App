@@ -27,7 +27,7 @@ export class AdminController {
     signout(@Session() session: any)
     {
       session.userId = null;
-      return "Log-Out";
+      return "You are logged out sucessfully";
     }
 
     @Post('/add')
@@ -39,9 +39,9 @@ export class AdminController {
       }
       const city = await this.adminService.add(addCity);
       if(!city) {
-        return 'error in adding city';
+        return 'Error in adding city';
       }
-      return 'city added successfully';
+      return 'City added successfully';
     }
     
     @Get()
