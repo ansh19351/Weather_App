@@ -33,7 +33,7 @@ let AdminController = class AdminController {
     }
     signout(session) {
         session.userId = null;
-        return "Log-Out";
+        return "You are logged out sucessfully";
     }
     async add(addCity, session) {
         if (session.userId === null) {
@@ -41,9 +41,9 @@ let AdminController = class AdminController {
         }
         const city = await this.adminService.add(addCity);
         if (!city) {
-            return 'error in adding city';
+            return 'Error in adding city';
         }
-        return 'city added successfully';
+        return 'City added successfully';
     }
     async getAllCities() {
         return this.adminService.getAllCities();

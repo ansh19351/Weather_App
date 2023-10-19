@@ -8,6 +8,6 @@ export declare class AdminController {
     signup(addAdmin: Admin): Promise<Admin>;
     signin(addAdmin: Admin, session: any): Promise<Admin>;
     signout(session: any): string;
-    add(addCity: City, session: any): Promise<ForbiddenException | "error in adding city" | "city added successfully">;
+    add(addCity: City, session: any): Promise<ForbiddenException | "Error in adding city" | "City added successfully">;
     getAllCities(): Promise<City[]>;
 }

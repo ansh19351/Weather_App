@@ -21,7 +21,6 @@ let UserService = class UserService {
     async getWeather() {
         const apiKey = '4f2efa67ddc44f2a9ad1e2d43b3e79ab';
         const cities = await this.adminService.getAllCities();
-        console.log(`------>${cities}`);
         const openWeatherBaseUrl = 'https://api.openweathermap.org/data/2.5/weather';
         const weatherData = [];
         for (const city of cities) {
