@@ -1,48 +1,50 @@
-import { Body, Controller, ForbiddenException, Get, Post, Session} from '@nestjs/common';
+import { Res, Controller, ForbiddenException, Get, Post, Request, UnauthorizedException} from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { City } from './entities/city.entity';
-import { Admin } from './entities/admin.entity';
 
 @Controller('admin')
 export class AdminController {
     constructor(private adminService: AdminService) {}
     
-    @Post('/signup')
-    signup(@Body() addAdmin: Admin)
+    @Post('signup')
+    signup(@Request() request)
     {
-      return this.adminService.signup(addAdmin);
+      return this.adminService.signup(request.body);
     }
     
-    @Post('/signin')
-    async signin(@Body() addAdmin: Admin, @Session() session: any)
+    @Post('signin')
+    async signin(@Request() request)
     {
-      const admin = await this.adminService.signin(addAdmin);
+      const admin = await this.adminService.signin(request.body);
       if(admin) {
-          session.userId = admin.id;
+          request.session.admin_id = admin.id;
+      }
+      else
+      {
+        request.session.admin_id = null;
       }
       return admin;
     }
     
     @Post('signout')
-    signout(@Session() session: any)
+    signout(@Request() request)
     {
-      session.userId = null;
+      request.session.admin_id = null;
       return "You are logged out sucessfully";
     }
 
-    @Post('/add')
-    async add(@Body() addCity: City, @Session() session: any) 
-    {
-      if(session.userId === null)
-      {
-        return new ForbiddenException("You are not authorized to perform this action")
+    @Post('add')
+    async add(@Request() request) {
+      if (request.session.admin_id === null) {
+        throw new ForbiddenException("You are not authorized to perform this action");
       }
-      const city = await this.adminService.add(addCity);
-      if(!city) {
+      const city = await this.adminService.add(request.body);
+      if (!city) {
         return 'Error in adding city';
       }
-      return 'City added successfully';
+      return 'City Added Successfully!';
     }
+
     
     @Get()
     async getAllCities(): Promise<City[]>
