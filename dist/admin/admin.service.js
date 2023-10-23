@@ -18,18 +18,30 @@ const typeorm_1 = require("@nestjs/typeorm");
 const city_entity_1 = require("./entities/city.entity");
 const admin_entity_1 = require("./entities/admin.entity");
 const typeorm_2 = require("typeorm");
+const bcrypt = require("bcrypt");
 let AdminService = class AdminService {
     constructor(CityRepository, AdminRepository) {
         this.CityRepository = CityRepository;
         this.AdminRepository = AdminRepository;
     }
+    async hashPassword(password) {
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        return hashedPassword;
+    }
+    async comparePasswords(plainPassword, hashedPassword) {
+        return bcrypt.compare(plainPassword, hashedPassword);
+    }
     async signup(admin) {
-        return this.AdminRepository.save(this.AdminRepository.create(admin));
+        var adm = admin;
+        adm.password = await this.hashPassword(adm.password);
+        return this.AdminRepository.save(this.AdminRepository.create(adm));
     }
     async signin(admin) {
         const users = await this.AdminRepository.find({ where: { email: admin.email } });
         const [user] = users;
-        if (!user || user.password !== admin.password) {
+        const isPasswordValid = await this.comparePasswords(admin.password, user.password);
+        if (!user || !isPasswordValid) {
             return null;
         }
         return user;

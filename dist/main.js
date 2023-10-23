@@ -10,7 +10,7 @@ async function bootstrap() {
     app.use(Cookie({ keys: ['cook'] }));
     app.use(session({ secret: 'weather session', resave: false, saveUninitialized: true, }));
     app.enableCors({
-        origin: 'http://localhost:3000',
+        origin: 'http://localhost:3001',
         methods: ["GET", "POST"],
         credentials: true,
     });
