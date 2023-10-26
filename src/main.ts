@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as session from 'express-session';
 import * as dotenv from 'dotenv';
+import { ValidationPipe } from '@nestjs/common';
 const Cookie = require('cookie-session');
 // Use reverse proxy
 const PORT = 3002;
@@ -9,6 +10,7 @@ const PORT = 3002;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   dotenv.config();
+  app.useGlobalPipes(new ValidationPipe);
   app.use(Cookie({keys:['cook']}));
   app.use(session({secret:'weather session', resave:false, saveUninitialized:true,}));
   app.enableCors({

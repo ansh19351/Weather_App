@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { City } from './entities/city.entity';
 import { Admin } from './entities/admin.entity';
+import { AdminDto } from './dtos/admin.dto';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
@@ -19,14 +20,14 @@ export class AdminService {
         return bcrypt.compare(plainPassword, hashedPassword);
     }
     
-    async signup(admin: Admin): Promise<Admin>
+    async signup(admin: AdminDto): Promise<Admin>
     {
         var adm = admin;
         adm.password = await this.hashPassword(adm.password);
         return this.AdminRepository.save(this.AdminRepository.create(adm));
     }
 
-    async signin(admin: Admin)
+    async signin(admin: AdminDto)
     {
         const users = await this.AdminRepository.find({where:{email:admin.email}});
         const [user] = users;
