@@ -1,4 +1,4 @@
-import { Res, Controller, ForbiddenException, Get, Post, Request, UnauthorizedException} from '@nestjs/common';
+import { Controller, ForbiddenException, Get, Post, Request } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { City } from './entities/city.entity';
 
@@ -9,6 +9,10 @@ export class AdminController {
     @Post('signup')
     signup(@Request() request)
     {
+      if(request.admin_id === null)
+      {
+        return {"message":"You are not authorized to access this page"};
+      }
       return this.adminService.signup(request.body);
     }
     
@@ -30,7 +34,7 @@ export class AdminController {
     signout(@Request() request)
     {
       request.session.admin_id = null;
-      return "You are logged out sucessfully";
+      return {"message":"You are logged out sucessfully"};
     }
 
     @Post('add')
@@ -40,12 +44,11 @@ export class AdminController {
       }
       const city = await this.adminService.add(request.body);
       if (!city) {
-        return 'Error in adding city';
+        return {"message":"Error in adding city"};
       }
-      return 'City Added Successfully!';
+      return {"message":"City Added Successfully"};
     }
 
-    
     @Get()
     async getAllCities(): Promise<City[]>
     {

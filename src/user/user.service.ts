@@ -8,9 +8,9 @@ export class UserService
     constructor(private adminService: AdminService){};
     async getWeather()
     {
-        const apiKey = '4f2efa67ddc44f2a9ad1e2d43b3e79ab';
+        const apiKey = process.env.API_KEY;
         const cities = await this.adminService.getAllCities();
-        const openWeatherBaseUrl = 'https://api.openweathermap.org/data/2.5/weather';
+        const openWeatherBaseUrl = process.env.API_BASE_URL;
         const weatherData = [];
         for (const city of cities) {
             try {
@@ -26,8 +26,10 @@ export class UserService
                 weatherDescription: response.data.weather[0].description,
             };
             weatherData.push(cityWeather);
-            } catch (error) {
-            console.error(`Failed to fetch weather data for ${city}: ${error.message}`);
+            } 
+            catch (error) 
+            {
+                console.error(`Failed to fetch weather data for ${city}: ${error.message}`);
             }
         }
         return weatherData;

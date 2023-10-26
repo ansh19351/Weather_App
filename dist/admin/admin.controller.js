@@ -20,6 +20,9 @@ let AdminController = class AdminController {
         this.adminService = adminService;
     }
     signup(request) {
+        if (request.admin_id === null) {
+            return { "message": "You are not authorized to access this page" };
+        }
         return this.adminService.signup(request.body);
     }
     async signin(request) {
@@ -34,7 +37,7 @@ let AdminController = class AdminController {
     }
     signout(request) {
         request.session.admin_id = null;
-        return "You are logged out sucessfully";
+        return { "message": "You are logged out sucessfully" };
     }
     async add(request) {
         if (request.session.admin_id === null) {
@@ -42,9 +45,9 @@ let AdminController = class AdminController {
         }
         const city = await this.adminService.add(request.body);
         if (!city) {
-            return 'Error in adding city';
+            return { "message": "Error in adding city" };
         }
-        return 'City Added Successfully!';
+        return { "message": "City Added Successfully" };
     }
     async getAllCities() {
         return this.adminService.getAllCities();

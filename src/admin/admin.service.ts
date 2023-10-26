@@ -13,17 +13,17 @@ export class AdminService {
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         return hashedPassword;
-      }
+    }
     
     async comparePasswords(plainPassword: string, hashedPassword: string): Promise<boolean> {
         return bcrypt.compare(plainPassword, hashedPassword);
-    }    
+    }
+    
     async signup(admin: Admin): Promise<Admin>
     {
         var adm = admin;
         adm.password = await this.hashPassword(adm.password);
-        return this.AdminRepository.save(
-        this.AdminRepository.create(adm));
+        return this.AdminRepository.save(this.AdminRepository.create(adm));
     }
 
     async signin(admin: Admin)
@@ -40,8 +40,7 @@ export class AdminService {
 
     async add(city: City): Promise<City> 
     {
-        return this.CityRepository.save(
-        this.CityRepository.create(city));
+        return this.CityRepository.save(this.CityRepository.create(city));
     }
     
     async getAllCities()
