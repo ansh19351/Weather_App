@@ -23,7 +23,7 @@ async function bootstrap() {
   .setTitle('Weather API')
   .setDescription('A simple Weather API')
   .setVersion('1.0')
-  .addTag('weather')
+  .addTag('Weather')
   .build();
   const document = SwaggerModule.createDocument(app, config);
 
