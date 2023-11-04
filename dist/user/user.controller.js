@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user.service");
+const swagger_1 = require("@nestjs/swagger");
 let UserController = class UserController {
     constructor(UserService) {
         this.UserService = UserService;
@@ -19,14 +20,25 @@ let UserController = class UserController {
     getWeather() {
         return this.UserService.getWeather();
     }
+    getCities() {
+        return this.UserService.getCities();
+    }
 };
 exports.UserController = UserController;
 __decorate([
     (0, common_1.Get)('/weather'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get weather' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'List weather of all cities' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "getWeather", null);
+__decorate([
+    (0, common_1.Get)('/cities'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], UserController.prototype, "getCities", null);
 exports.UserController = UserController = __decorate([
     (0, common_1.Controller)("user"),
     __metadata("design:paramtypes", [user_service_1.UserService])

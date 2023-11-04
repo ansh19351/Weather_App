@@ -3,4 +3,5 @@ export declare class UserController {
     private UserService;
     constructor(UserService: UserService);
     getWeather(): Promise<any[]>;
+    getCities(): Promise<any>;
 }

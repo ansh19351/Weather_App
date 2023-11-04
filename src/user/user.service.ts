@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import axios, { AxiosResponse } from 'axios';
 import { AdminService } from "../admin/admin.service";
+const cities = require('cities.json');
 
 @Injectable()
 export class UserService
@@ -33,5 +34,9 @@ export class UserService
             }
         }
         return weatherData;
+    }
+    async getCities()
+    {
+        return cities;
     }
 }

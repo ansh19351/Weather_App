@@ -15,6 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminController = void 0;
 const common_1 = require("@nestjs/common");
 const admin_service_1 = require("./admin.service");
+const city_entity_1 = require("./entities/city.entity");
+const swagger_1 = require("@nestjs/swagger");
+const admin_dto_1 = require("./dtos/admin.dto");
+const common_2 = require("@nestjs/common");
 let AdminController = class AdminController {
     constructor(adminService) {
         this.adminService = adminService;
@@ -32,6 +36,7 @@ let AdminController = class AdminController {
         }
         else {
             request.session.admin_id = null;
+            throw new common_1.HttpException('Invalid Login Credentials', common_2.HttpStatus.UNAUTHORIZED);
         }
         return admin;
     }
@@ -63,6 +68,10 @@ __decorate([
 ], AdminController.prototype, "signup", null);
 __decorate([
     (0, common_1.Post)('signin'),
+    (0, swagger_1.ApiOperation)({ summary: 'Admin Login' }),
+    (0, swagger_1.ApiBody)({ type: admin_dto_1.AdminDto, description: 'Admin login credentials' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Admin logged in' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Unauthorized' }),
     __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -77,6 +86,10 @@ __decorate([
 ], AdminController.prototype, "signout", null);
 __decorate([
     (0, common_1.Post)('add'),
+    (0, swagger_1.ApiOperation)({ summary: 'Protected add city route (requires authentication via session)' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Protected route accessed' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Unauthorized' }),
+    (0, swagger_1.ApiBody)({ type: city_entity_1.City, description: 'Admin login credentials' }),
     __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -89,6 +102,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AdminController.prototype, "getAllCities", null);
 exports.AdminController = AdminController = __decorate([
+    (0, swagger_1.ApiTags)('admin'),
     (0, common_1.Controller)('admin'),
     __metadata("design:paramtypes", [admin_service_1.AdminService])
 ], AdminController);

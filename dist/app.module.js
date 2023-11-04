@@ -13,19 +13,23 @@ const admin_module_1 = require("./admin/admin.module");
 const typeorm_1 = require("@nestjs/typeorm");
 const city_entity_1 = require("./admin/entities/city.entity");
 const admin_entity_1 = require("./admin/entities/admin.entity");
+const config_1 = require("@nestjs/config");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forRootAsync({
+        imports: [config_1.ConfigModule.forRoot({
+                envFilePath: '.env',
+                isGlobal: true,
+            }), typeorm_1.TypeOrmModule.forRootAsync({
                 useFactory: () => ({
                     type: 'postgres',
-                    host: 'localhost',
+                    host: "localhost",
                     port: 5432,
-                    username: 'postgres',
-                    password: 'Marghat$0811',
-                    database: 'postgres',
+                    username: process.env.POSTGRES_USER,
+                    password: process.env.POSTGRES_PASSWORD,
+                    database: process.env.POSTGRES_DB,
                     entities: [city_entity_1.City, admin_entity_1.Admin],
                     synchronize: true,
                     logging: true,

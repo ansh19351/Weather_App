@@ -5,6 +5,7 @@ const app_module_1 = require("./app.module");
 const session = require("express-session");
 const dotenv = require("dotenv");
 const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
 const Cookie = require('cookie-session');
 const PORT = 3002;
 async function bootstrap() {
@@ -18,6 +19,14 @@ async function bootstrap() {
         methods: ["GET", "POST"],
         credentials: true,
     });
+    const config = new swagger_1.DocumentBuilder()
+        .setTitle('Weather API')
+        .setDescription('A simple Weather API')
+        .setVersion('1.0')
+        .addTag('weather')
+        .build();
+    const document = swagger_1.SwaggerModule.createDocument(app, config);
+    swagger_1.SwaggerModule.setup('api', app, document);
     await app.listen(PORT);
 }
 bootstrap();

@@ -13,6 +13,7 @@ exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
 const axios_1 = require("axios");
 const admin_service_1 = require("../admin/admin.service");
+const cities = require('cities.json');
 let UserService = class UserService {
     constructor(adminService) {
         this.adminService = adminService;
@@ -43,6 +44,9 @@ let UserService = class UserService {
             }
         }
         return weatherData;
+    }
+    async getCities() {
+        return cities;
     }
 };
 exports.UserService = UserService;
