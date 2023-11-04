@@ -24,7 +24,7 @@ let AdminController = class AdminController {
         this.adminService = adminService;
     }
     signup(request) {
-        if (request.admin_id === null) {
+        if (request.session.admin_id === null) {
             return { "message": "You are not authorized to access this page" };
         }
         return this.adminService.signup(request.body);
@@ -41,6 +41,9 @@ let AdminController = class AdminController {
         return admin;
     }
     signout(request) {
+        if (request.session.admin_id === null) {
+            throw new common_1.HttpException('Unauthorized', common_2.HttpStatus.UNAUTHORIZED);
+        }
         request.session.admin_id = null;
         return { "message": "You are logged out sucessfully" };
     }
@@ -61,6 +64,10 @@ let AdminController = class AdminController {
 exports.AdminController = AdminController;
 __decorate([
     (0, common_1.Post)('signup'),
+    (0, swagger_1.ApiOperation)({ summary: 'Admin Sign Up' }),
+    (0, swagger_1.ApiBody)({ type: admin_dto_1.AdminDto, description: 'Admin Sign Up' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Sign Up Successful' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Unauthorized' }),
     __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -79,6 +86,9 @@ __decorate([
 ], AdminController.prototype, "signin", null);
 __decorate([
     (0, common_1.Post)('signout'),
+    (0, swagger_1.ApiOperation)({ summary: 'User signout' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'User signed out successfully' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Unauthorized' }),
     __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -102,8 +112,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AdminController.prototype, "getAllCities", null);
 exports.AdminController = AdminController = __decorate([
-    (0, swagger_1.ApiTags)('admin'),
     (0, common_1.Controller)('admin'),
+    (0, swagger_1.ApiTags)('Admin'),
     __metadata("design:paramtypes", [admin_service_1.AdminService])
 ], AdminController);
 //# sourceMappingURL=admin.controller.js.map

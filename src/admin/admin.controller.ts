@@ -5,15 +5,19 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { AdminDto } from './dtos/admin.dto';
 import { HttpStatus } from '@nestjs/common';
 
-@ApiTags('admin')
 @Controller('admin')
+@ApiTags('Admin')
 export class AdminController {
     constructor(private adminService: AdminService) {}
     
     @Post('signup')
+    @ApiOperation({ summary: 'Admin Sign Up' })
+    @ApiBody({ type: AdminDto, description: 'Admin Sign Up' })
+    @ApiResponse({ status: 200, description: 'Sign Up Successful' })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     signup(@Request() request)
     {
-      if(request.admin_id === null)
+      if(request.session.admin_id === null)
       {
         return {"message":"You are not authorized to access this page"};
       }
@@ -41,8 +45,15 @@ export class AdminController {
     }
     
     @Post('signout')
+    @ApiOperation({ summary: 'User signout' })
+    @ApiResponse({ status: 200, description: 'User signed out successfully' })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     signout(@Request() request)
     {
+      if (request.session.admin_id === null)
+      {
+        throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+      }
       request.session.admin_id = null;
       return {"message":"You are logged out sucessfully"};
     }
